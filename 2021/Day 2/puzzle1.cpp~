@@ -1,0 +1,16 @@
+#include <iostream>
+#include <string>
+
+int
+main()
+{
+  std::string command;
+  int value;
+
+  while(std::cin >> command >> value)
+    {
+      std::cout << command << ' ' << value << '\n';
+    }
+
+  return 0;
+}
