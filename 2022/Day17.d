@@ -197,9 +197,8 @@ class RockSimulation
 {
   // Simulation constants
   string jetPattern;
-  bool[7][] chamber = new bool[7][](4);
-  Rock[5] rocks = [new LineRock(), new PlusRock(), new RightRock(), new VerticalRock(),
-		   new SquareRock()];
+  bool[7][] chamber;
+  Rock[5] rocks;
   ulong[4][string] states;
 
   ulong towerHeight;
@@ -209,6 +208,9 @@ class RockSimulation
   this(string jetPattern)
   {
     this.jetPattern = jetPattern;
+    rocks = [new LineRock(), new PlusRock(), new RightRock(), new VerticalRock(),
+	     new SquareRock()];
+    chamber = new bool[7][](4);
   }
 
   void simulateFallingRock(Rock rock)
@@ -239,7 +241,7 @@ class RockSimulation
     return rock;
   }
 
-  ulong run(ulong steps, bool cycleDetection = false)
+  ulong run(ulong steps, bool cycleDetection = true)
   {
     ulong heightOfCycles;
    
@@ -251,7 +253,7 @@ class RockSimulation
 
 	// Update the state with the top of the tower
 	string towerTop = "";
-	for (size_t row = towerHeight; row > towerHeight - 8; --row)
+	for (size_t row = towerHeight; row > towerHeight - 20; --row)
 	  {
 	    foreach (cell; chamber[row])
 	      towerTop ~= cell ? "1" : "0";
@@ -259,7 +261,7 @@ class RockSimulation
 	string state = format("%s-%s-%s", rock, jetIndex, towerTop);
 
 	// Handle the detection of cycles
-	if (state in states && cycleDetection && i > 8)
+	if (state in states && cycleDetection && i > 20)
 	  {
 	    auto heightPerCycle = towerHeight - states[state][0];
 	    auto rocksPerCycle = i - states[state][1];
